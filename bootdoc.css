@@ -1,0 +1,41 @@
+﻿.symbol {
+	padding-top: 40px;
+}
+
+.highlighted-symbol {
+	background-color: rgba(255, 200, 0, 0.5);
+}
+
+.declaration-content {
+	margin: 6px 18px;
+}
+
+.tree-node, .tree-leaf {
+	text-transform: none;
+}
+
+.custom-icon-list {
+	list-style-type: none;
+}
+
+.hidden {
+	display: none;
+}
+
+.d_keyword {
+	color: blue;
+}
+
+.d_string {
+	color: red;
+}
+
+.d_comment {
+	color: gray;
+}
+
+[class*='ddoc-icon-'] {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+}

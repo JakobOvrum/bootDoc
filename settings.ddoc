@@ -1,0 +1,11 @@
+PROJECTNAME = Example Project
+REFERENCETOP = index.html
+REPOSRCTREE = http://github.com/JakobOvrum/bootDoc/tree/master
+TITLEBARTEXT = <a href="https://github.com/JakobOvrum/bootDoc">Github Page</a>
+RESOURCEROOT = bootDoc/
+LOGOSRC = logo.png
+LOGOALT = $(PROJECTNAME)
+LOGOLINK = $(REFERENCETOP)
+FAVICON = favicon.png
+COPYRIGHT = Jakob Ovrum
+STARTYEAR = 2012
