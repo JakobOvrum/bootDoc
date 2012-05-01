@@ -58,7 +58,7 @@ DDOC = <!DOCTYPE html>
 		.ddoc-icon-class { background-image: url('$(RESOURCEROOT)ddoc-icons/class.png'); }
 		.ddoc-icon-enum { background-image: url('$(RESOURCEROOT)ddoc-icons/enum.png'); }
 		.ddoc-icon-template { background-image: url('$(RESOURCEROOT)ddoc-icons/template.png'); }
-	<style>
+	</style>
 	</head>
 
 	<body>
