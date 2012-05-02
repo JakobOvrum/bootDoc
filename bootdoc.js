@@ -36,7 +36,7 @@ function buildModuleTree(modlist) {
  * Build a path to the appropriate resource for a fully qualified module name.
  */
 function qualifiedModuleNameToUrl(modName) {
-	return modName.slice(modName.indexOf(".") + 1).replace('.', '_') + '.html';
+	return modName.replace('.', '_') + '.html';
 };
 
 /**
