@@ -19,8 +19,8 @@ Features
 
 Demonstration
 -----------------------------------
-The [LuaD documentation](http://jakobovrum.github.com/LuaD/) uses *bootDoc*.
-A set of *bootDoc* generated pages for Phobos will come soon.
+Phobos documentation using *bootDoc* can be found [here](http://jakobovrum.github.com/bootdoc-phobos/).
+Additionally, the [LuaD documentation](http://jakobovrum.github.com/LuaD/) uses *bootDoc*.
 
 Usage with Github Pages
 -----------------------------------
