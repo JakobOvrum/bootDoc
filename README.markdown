@@ -48,9 +48,9 @@ Usage in General
 DDoc is configured using the files `bootdoc.ddoc`, `settings.ddoc` and `modules.ddoc`.
 The latter two are templates; copy them to your project directory before editing them.
 `settings.ddoc` contains general information about your project; its values are
-documented [here](https://github.com/JakobOvrum/LuaD/wiki/settings.ddoc). `modules.ddoc` contains
+documented [here](https://github.com/JakobOvrum/bootDoc/wiki/settings.ddoc). `modules.ddoc` contains
 a candyDoc-style list of all the modules in your project, and is documented
-[here](https://github.com/JakobOvrum/LuaD/wiki/modules.ddoc).
+[here](https://github.com/JakobOvrum/bootDoc/wiki/modules.ddoc).
 
 Pages are generated using the included script `generate.d`. Run it without arguments to
 see an overview of how to use it.
