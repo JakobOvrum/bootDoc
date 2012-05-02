@@ -211,7 +211,7 @@ PHOBOSSRC=$(LINK2 https://github.com/D-Programming-Language/phobos/blob/master/$
 DRUNTIMESRC=$(LINK2 https://github.com/D-Programming-Language/druntime/blob/master/src/$0, $0)
 SAMPLESRC=$(LINK2 https://github.com/D-Programming-Language/dmd/blob/master/samples/$0, /dmd/samples/d/$0)
 
-BOOKTABLE = <table cellspacing=0 cellpadding=5 class=book><caption>$1</caption>$2</table>
+BOOKTABLE = <table cellspacing=0 cellpadding=5 class="table"><caption>$1</caption>$2</table>
 LEADINGROW = <tr class=leadingrow><td colspan=2><b><em>&nbsp;&nbsp;&nbsp;&nbsp;$0</em></b></td></tr>
 TABLE = <table cellspacing=0 cellpadding=5><caption>$1</caption>$2</table>
 TD = <td valign=top>$0</td>
