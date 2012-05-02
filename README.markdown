@@ -38,7 +38,7 @@ Usage with Github Pages
    cp bootDoc/settings.ddoc settings.ddoc;
    cp bootDoc/modules.ddoc modules.ddoc;
    ```
- * Edit `settings.ddoc` and `modules.ddoc` to match your project's profile.
+ * Edit `settings.ddoc` and `modules.ddoc` to match your project's profile ([see below](#usage-in-general)).
  * Run the generation script, passing the root location of your sources: `rdmd bootDoc/generate.d ..`.
   - The list of modules is read from `modules.ddoc`. For example, using the above command, if your `modules.ddoc` has one entry `$(MODULE example.example)`, then `example_example.html` will be generated from `../example/example.d` (aka `myproj/example/example.d`).
   - If you have an index file tracked on the gh-pages branch instead of among the sources, pass it to the generation script using `--extra=index.d`. Any number of extra files can be passed this way.
