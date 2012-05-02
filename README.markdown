@@ -24,8 +24,6 @@ Usage with Github
 
     cp bootDoc/settings.ddoc settings.ddoc
     cp bootDoc/modules.ddoc modules.ddoc
-	cp bootDoc/Makefile Makefile
 
- * Edit the `Makefile` to match your project's profile.
  * Edit `settings.ddoc` and `modules.ddoc` to match your project's profile.
- * Run `make` to generate the documentation pages.
+ * **(work in progress)**
