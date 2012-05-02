@@ -81,7 +81,7 @@ void main(string[] args)
 	bool verbose = false;
 	
 	string[] extras;
-	getopt(args,
+	getopt(args, config.passThrough,
 		"bootdoc", &bootDoc,
 		"modules", &moduleFile,
 		"settings", &settingsFile,
@@ -99,6 +99,12 @@ void main(string[] args)
 	
 	string root = args[1];
 	
+	string passThrough = null;
+	if(args.length > 2)
+	{
+		passThrough = args[2 .. $].map!(arg => format(`"%s"`, arg))().array().join(" ");
+	}
+	
 	auto modPaths = parseModuleFile(moduleFile);
 	
 	auto bootDocFile = format("%s/bootdoc.ddoc", bootDoc);
@@ -109,8 +115,13 @@ void main(string[] args)
 		
 		auto inputPath = prependRoot? format("%s/%s", root, path) : path;
 		
-		auto command = format(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s"`,
+		auto command = format(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
 			dmd, root, outputPath, inputPath, moduleFile, settingsFile, bootDocFile);
+		
+		if(passThrough !is null)
+		{
+			command ~= passThrough;
+		}
 		
 		if(verbose) writefln("%s => %s\n  [%s]\n", path, outputPath, command);
 		
