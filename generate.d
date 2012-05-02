@@ -34,13 +34,41 @@ string generatedPath(in char[] modName, in char[] separator)
 	return (modName.stripExtension().replace("/", separator) ~ ".html").idup;
 }
 
-auto usage = `Generate bootDoc documentation pages.
+auto usage = `Generate bootDoc documentation pages for a project
+documented with DDoc.
 
 Usage:
 %s "path to project root" [options]
-Options:
-	--modulefile path to candyDoc-style list of modules. [default: "modules.ddoc"]
-	--verbose    print information during the generation process.
+Options (defaults in brackets):
+  --bootdoc=<path>     path to bootDoc directory
+                       (containing the file bootdoc.ddoc). ["bootDoc"]
+  --modules=<path>     path to candyDoc-style list of modules.
+                       ["modules.ddoc"]
+  --settings=<path>    path to settings file. ["settings.ddoc"]
+  --separator=<string> package separator for output HTML files. ["_"]
+  --verbose            print information during the generation process.
+  --dmd=<string>       name of compiler frontend to use for generation. ["dmd"]
+  --extra=<path>       path to extra module. Can be used multiple times.
+
+Description:
+Generates bootDoc-themed DDoc documentation for a list of D modules.
+The modules are read from the specified candyDoc-style module list,
+as well as taken from any --extra arguments passed. Each module name
+is converted to a relative path, which is then searched in the
+specified project root.
+
+Example module file:
+    MODULES =
+        $(MODULE example.example)
+
+Example generation:
+    rdmd bootDoc/generate.d ..
+
+The above will read modules.ddoc from the working directory,
+then generate documentation for all listed modules. The module
+example.example is searched for at the path ../example/example.d
+and its HTML output is put in example_example.html. The output
+is configured with settings.ddoc, read from the working directory.
 `;
 
 void main(string[] args)
