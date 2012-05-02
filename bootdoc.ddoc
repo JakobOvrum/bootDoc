@@ -107,13 +107,15 @@ DDOC = <!DOCTYPE html>
 				<div id="declaration-list">
 					$(BODY)
 				</div>
-			</div>
-			
-			<hr>
-			
-			<div class="pull-right">
-				<footer>
-					<p>&copy; $(COPYRIGHT) $(STARTYEAR)-$(YEAR)</p>
+				
+				<hr>
+				
+				<footer class="pull-left">
+					<p>Page generated with <a href="https://github.com/JakobOvrum/bootDoc">bootDoc</a>.</p>
+				</footer>
+				
+				<footer class="pull-right">
+					<p>$(COPYRIGHTFOOTER)</p>
 				</footer>
 			</div>
 		</div>
