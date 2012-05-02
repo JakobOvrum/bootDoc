@@ -55,28 +55,41 @@ function populateModuleList(modTree) {
 			   '</li>';
 	}
 	
-	function traverser(node, parentList) {
+	var $listHeader = $('#module-list');
+	
+	function traverser(node, $parentList) {
 		for(var name in node.members) {
 			var member = node.members[name];
 			
 			if(member.type == 'package') {
 				var $elem = $(treePackageNode(name));
-				parentList.append($elem);
-				traverser(member, $elem.find('ul'));
+				$parentList.append($elem);
+				
+				var $ul = $elem.find('ul');
+				if($parentList != $listHeader) {
+					$ul.hide();
+				}
+				
+				traverser(member, $ul);
 				
 			} else if(member.type == 'module') {
 				var url = qualifiedModuleNameToUrl(member.qualifiedName);
 				var $elem = $(treeModuleNode(name, url));
-				parentList.append($elem);
+				$parentList.append($elem);
 				
 				if(member.qualifiedName == Title) { // Current module.
 					$elem.find('a').append(' <i class="icon-asterisk"></i>');
+					
+					var $up = $parentList;
+					while(!$up.is($listHeader)) {
+						$up.show();
+						$up = $up.parent();
+					}
 				}
 			}
 		}
 	}
-	
-	var $listHeader = $('#module-list');
+
 	traverser(modTree, $listHeader);
 };
 
