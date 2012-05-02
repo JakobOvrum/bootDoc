@@ -244,11 +244,11 @@ function highlightSymbol(targetId) {
 	var escapedTargetId = targetId.replace(/\./g, '\\.');
 	var $target = $(escapedTargetId).parent();
 	
-	$target.addClass('highlighted-symbol');
-	
 	if(window.currentlyHighlightedSymbol) {
 		window.currentlyHighlightedSymbol.removeClass('highlighted-symbol');
 	}
+	
+	$target.addClass('highlighted-symbol');
 	
 	window.currentlyHighlightedSymbol = $target;
 }
