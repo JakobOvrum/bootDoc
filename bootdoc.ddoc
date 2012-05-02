@@ -86,8 +86,8 @@ DDOC = <!DOCTYPE html>
 			<div class="span2">
 				<div class="well sidebar-nav">
 				<ul class="nav nav-list">
-					<li id="module-list" class="nav-header">Modules<li>
-					<li id="symbol-list" class="nav-header hidden">$(TITLE)</li>
+					<li id="module-list" class="nav-header sidebar-list-entry">Modules<li>
+					<li id="symbol-list" class="nav-header sidebar-list-entry hidden">$(TITLE)</li>
 				</ul>
 				</div><!--/.well -->
 			</div><!--/span-->

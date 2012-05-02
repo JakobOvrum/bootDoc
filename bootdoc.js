@@ -44,14 +44,14 @@ function qualifiedModuleNameToUrl(modName) {
  */
 function populateModuleList(modTree) {	
 	function treePackageNode(name) {
-		return '<li class="dropdown">' +
-			   '<a class="tree-node" href="javascript:;"><i class="icon-th-list"></i> ' + name + '<b class="caret"></b></a>' +
+		return '<li class="dropdown sidebar-list-entry">' +
+			   '<a class="tree-node" href="javascript:;" title="' + name + '"><i class="icon-th-list"></i> ' + name + '<b class="caret"></b></a>' +
 			   '<ul class="custom-icon-list"></ul></li>';
 	}
 
 	function treeModuleNode(name, url) {
-		return '<li>' +
-			   '<a class="tree-leaf" href="' + url + '"><i class="icon-th"></i> ' + name + '</a>' +
+		return '<li class="sidebar-list-entry">' +
+			   '<a class="tree-leaf" href="' + url + '" title="' + name + '"><i class="icon-th"></i> ' + name + '</a>' +
 			   '</li>';
 	}
 	
@@ -203,13 +203,13 @@ function buildSymbolTree() {
  */
 function populateSymbolList(tree) {	
 	function expandableNode(name, anchor, type) {
-		return '<li class="dropdown"><span>' +
-		       '<i class="ddoc-icon-' + type + '"></i><a class="symbol-anchor" href="#' + anchor + '">' + name + '</a>' +
+		return '<li class="dropdown sidebar-list-entry"><span>' +
+		       '<i class="ddoc-icon-' + type + '"></i><a class="symbol-anchor" href="#' + anchor + '" title="' + name + '">' + name + '</a>' +
 		       '</span><ul class="custom-icon-list"></ul></li>';
 	}
 	
 	function leafNode(name, anchor, type) {
-		return '<li><span><i class="ddoc-icon-' + type + '"></i><a class="symbol-anchor" href="#' + anchor + '">' + name + '</a></span></li>';
+		return '<li class="sidebar-list-entry"><span><i class="ddoc-icon-' + type + '"></i><a class="symbol-anchor" href="#' + anchor + '" title="' + name + '">' + name + '</a></span></li>';
 	}
 	
 	var anchorNames = new Array();
