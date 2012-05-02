@@ -40,6 +40,10 @@
 	color: gray;
 }
 
+.inlinecode {
+	font-family: "Consolas", "Bitstream Vera Sans Mono", "Andale Mono", "Monaco", "DejaVu Sans Mono", "Lucida Console", "monospace";
+}
+
 [class*='ddoc-icon-'] {
 	display: inline-block;
 	width: 16px;
