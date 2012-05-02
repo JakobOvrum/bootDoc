@@ -55,6 +55,10 @@ a candyDoc-style list of all the modules in your project, and is documented
 Pages are generated using the included script `generate.d`. Run it without arguments to
 see an overview of how to use it.
 
+License
+-----------------------------------
+bootDoc is licensed under the terms of the MIT license (see the [LICENSE file](http://github.com/JakobOvrum/bootDoc/blob/master//LICENSE.txt) for details).
+
 Acknowledgements
 -----------------------------------
 Thanks to [Robik](https://github.com/robik) for his work on [cuteDoc](https://github.com/robik/cuteDoc), which inspired this project.
