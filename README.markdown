@@ -54,3 +54,7 @@ a candyDoc-style list of all the modules in your project, and is documented
 
 Pages are generated using the included script `generate.d`. Run it without arguments to
 see an overview of how to use it.
+
+Acknowledgements
+-----------------------------------
+Thanks to [Robik](https://github.com/robik) for his work on [cuteDoc](https://github.com/robik/cuteDoc), which inspired this project.
