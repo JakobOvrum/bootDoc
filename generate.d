@@ -50,6 +50,8 @@ Options (defaults in brackets):
   --dmd=<string>       name of compiler frontend to use for generation. ["dmd"]
   --extra=<path>       path to extra module. Can be used multiple times.
 
+Options not listed above are passed to the D compiler on generation.
+
 Description:
 Generates bootDoc-themed DDoc documentation for a list of D modules.
 The modules are read from the specified candyDoc-style module list,
