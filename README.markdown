@@ -7,6 +7,8 @@ by enabling fully qualified page anchors.
 The theme is designed to work with any project by putting all project-specific information in separate configuration
 files.
 
+**Please post bugs, enhancement requests and questions on the [Github issue tracker](https://github.com/JakobOvrum/bootDoc/issues). Thanks!*
+
 Features
 -----------------------------------
  * Easily configurable for any project, designed to work as a git-submodule.
