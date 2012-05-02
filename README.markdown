@@ -1,10 +1,19 @@
 bootDoc
 ===================================
 [DDoc](http://dlang.org/ddoc.html) theme using [Bootstrap](http://twitter.github.com/bootstrap/) for styling.
+*bootDoc* uses JavaScript to extend and improve DDoc's capabilities, such as by adding a module overview tree and
+by enabling fully qualified page anchors.
+
+The theme is designed to work with any project by putting all project-specific information in separate configuration
+files.
 
 Features
 -----------------------------------
-
+ * Easily configurable for any project, designed to work as a git-submodule.
+ * Sidebar with a package explorer tree and a tree of the symbols in the current module.
+ * Configurable titlebar, with a goto-symbol form.
+ * Fully qualified page anchor names; individual symbols can be linked without conflicting with similarly named symbols in the same module.
+ * Neat styling using [Bootstrap](http://twitter.github.com/bootstrap/).
 
 Demonstration
 -----------------------------------
@@ -34,4 +43,14 @@ Usage with Github Pages
  * Push your newly generated HTML files.
   - To update the documentation, run the generation script again.
 
+Usage in General
+-----------------------------------
+DDoc is configured using the files `bootdoc.ddoc`, `settings.ddoc` and `modules.ddoc`.
+The latter two are templates; copy them to your project directory before editing them.
+`settings.ddoc` contains general information about your project; its values are
+documented [here](https://github.com/JakobOvrum/LuaD/wiki/settings.ddoc). `modules.ddoc` contains
+a candyDoc-style list of all the modules in your project, and is documented
+[here](https://github.com/JakobOvrum/LuaD/wiki/modules.ddoc).
 
+Pages are generated using the included script `generate.d`. Run it without arguments to
+see an overview of how to use it.
