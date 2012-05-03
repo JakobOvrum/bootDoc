@@ -45,7 +45,7 @@ Options (defaults in brackets):
   --modules=<path>     path to candyDoc-style list of modules.
                        ["modules.ddoc"]
   --settings=<path>    path to settings file. ["settings.ddoc"]
-  --separator=<string> package separator for output HTML files. ["_"]
+  --separator=<string> package separator for output HTML files. ["."]
   --verbose            print information during the generation process.
   --dmd=<string>       name of compiler frontend to use for generation. ["dmd"]
   --extra=<path>       path to extra module. Can be used multiple times.
@@ -64,7 +64,7 @@ Example module file:
         $(MODULE example.example)
 
 Example generation:
-    rdmd bootDoc/generate.d ..
+    rdmd bootDoc/generate.d .. --separator=_
 
 The above will read modules.ddoc from the working directory,
 then generate documentation for all listed modules. The module
@@ -78,7 +78,7 @@ void main(string[] args)
 	string bootDoc = "bootDoc";
 	string moduleFile = "modules.ddoc";
 	string settingsFile = "settings.ddoc";
-	string separator = "_";
+	string separator = ".";
 	string dmd = "dmd";
 	bool verbose = false;
 	
@@ -118,7 +118,7 @@ void main(string[] args)
 		auto inputPath = prependRoot? format("%s/%s", root, path) : path;
 		
 		auto command = format(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
-			dmd, root, outputPath, inputPath, moduleFile, settingsFile, bootDocFile);
+			dmd, root, outputPath, inputPath, settingsFile, bootDocFile, moduleFile);
 		
 		if(passThrough !is null)
 		{

@@ -45,14 +45,19 @@ function buildModuleTree(modlist) {
 	}
 	
 	return root;
-};
+}
 
 /**
- * Build a path to the appropriate resource for a fully qualified module name.
+ * Build a path to the appropriate resource for a fully qualified module name,
+ * respecting the global PackageSeparator variable.
  */
 function qualifiedModuleNameToUrl(modName) {
-	return modName.replace(/\./g, '_') + '.html';
-};
+	if(PackageSeparator == '.') {
+		return modName + '.html';
+	} else {
+		return modName.replace(/\./g, PackageSeparator) + '.html';
+	}
+}
 
 /**
  * Create the module list in the sidebar.
@@ -106,14 +111,14 @@ function populateModuleList(modTree) {
 	}
 
 	traverser(modTree, $listHeader);
-};
+}
 
 /**
  * Build a relative path for the given module name.
  */
 function moduleNameToPath(modName) {
 	return modName.replace(/\./g, '/') + '.d';
-};
+}
 
 /**
  * Configure the breadcrumb component at the top of the page
@@ -133,7 +138,7 @@ function updateBreadcrumb(qualifiedName, sourceRepoUrl) {
 			$breadcrumb.append('<li><h2>' + part + '<span class="divider">/</span></h2></li>');
 		}
 	}
-};
+}
 
 var enumRegex = /^enum /;
 var structRegex = /^struct /;
@@ -263,7 +268,7 @@ function populateSymbolList(tree) {
 	traverser(tree, $symbolHeader.parent(), '');
 	
 	return anchorNames;
-};
+}
 
 /**
  * Set the current symbol to highlight.
