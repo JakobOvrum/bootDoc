@@ -59,7 +59,7 @@ see an overview of how to use it.
 
 License
 -----------------------------------
-bootDoc is licensed under the terms of the MIT license (see the [LICENSE file](http://github.com/JakobOvrum/bootDoc/blob/master//LICENSE.txt) for details).
+bootDoc is licensed under the terms of the MIT license (see the [LICENSE file](http://github.com/JakobOvrum/bootDoc/blob/master/LICENSE.txt) for details).
 
 Acknowledgements
 -----------------------------------
