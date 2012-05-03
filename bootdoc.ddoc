@@ -1,4 +1,4 @@
-MODULE = "$1",
+MODULE = <li class="sidebar-list-entry tree-leaf"><a href="$1.html" title="$1"><i class="icon-th"></i>$1</a></li>
 WARNING     = <div><strong>Warning:</strong> $0</div>
 CRITICAL    = <div><strong>Critical:</strong> $0</div>
 
@@ -40,9 +40,6 @@ DDOC = <!DOCTYPE html>
 	<script type="text/javascript">
 		var Title = '$(TITLE)';
 		var SourceRepository = '$(REPOSRCTREE)';
-		var Modules = [
-			$(MODULES)
-		];
 	</script>
 	
 	<style type="text/css">
@@ -57,6 +54,15 @@ DDOC = <!DOCTYPE html>
 	</head>
 
 	<body>
+	<!--
+	JavaScript reaps the module list from this element.
+	This is required for the MODULES macro to be reusable
+	in a noscript element later.
+	-->
+	<ul id="module-list-source" class="hidden">
+		$(MODULES)
+	</ul>
+	
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container-fluid">
@@ -87,6 +93,9 @@ DDOC = <!DOCTYPE html>
 				<div class="well sidebar-nav">
 				<ul class="nav nav-list">
 					<li id="module-list" class="nav-header sidebar-list-entry">Modules<li>
+					<noscript>
+						$(MODULES)
+					</noscript>
 					<li id="symbol-list" class="nav-header sidebar-list-entry hidden">$(TITLE)</li>
 				</ul>
 				</div><!--/.well -->

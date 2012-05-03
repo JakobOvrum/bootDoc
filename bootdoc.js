@@ -1,4 +1,19 @@
 /**
+ * Construct the module list from source.
+ * The module list is located in the source
+ * because it must also work with noscript.
+ */
+function reapModuleList() {
+	var modules = new Array();
+	
+	$('#module-list-source').find('li > a').each(function() {
+		modules.push($(this).text());
+	});
+	
+	return modules;
+}
+
+/**
  * Build a table representing the module hierarchy of the project
  * given a linear list of modules.
  */
@@ -288,13 +303,13 @@ function setupGotoSymbolForm(typeaheadData) {
 	$form.removeClass('hidden');
 }
 
-// 'Title', 'SourceRepository', and 'Modules' are created inline in the DDoc generated HTML page.
+// 'Title' and 'SourceRepository' are created inline in the DDoc generated HTML page.
 $(document).ready(function() {
 	// Setup page title.
 	updateBreadcrumb(Title, SourceRepository);
 	
 	// Construct module list.
-	populateModuleList(buildModuleTree(Modules));
+	populateModuleList(buildModuleTree(reapModuleList()));
 	
 	// Construct symbol list and setup goto-symbol form.
 	var symbolTree = buildSymbolTree();
