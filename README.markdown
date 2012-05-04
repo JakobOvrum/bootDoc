@@ -13,7 +13,7 @@ Features
 -----------------------------------
  * Easily configurable for any project, designed to work as a git-submodule.
  * Sidebar with a package explorer tree and a tree of the symbols in the current module.
- * Configurable titlebar, with a goto-symbol form.
+ * Configurable titlebar, with a go-to-symbol form.
  * Fully qualified page anchor names; individual symbols can be linked without conflicting with similarly named symbols in the same module.
  * Neat styling using [Bootstrap](http://twitter.github.com/bootstrap/).
 
@@ -25,7 +25,7 @@ Additionally, the [LuaD documentation](http://jakobovrum.github.com/LuaD/) uses 
 Usage with Github Pages
 -----------------------------------
 
- * Create a gh-pages branch to host the generated documentation ([instructions here](http://help.github.com/pages/)).
+ * Create a gh-pages branch to host the generated documentation ([instructions here](http://help.github.com/pages/#project_pages_manually)).
   - For the purposes of this guide, we will assume this is an empty branch in its own repository in a subdirectory of the repository containing the source files.
   - For example, if your project repository is in a directory `myproj`, we will assume your gh-pages repository is in `myproj/gh-pages`.
   - The working directory of the following commands is assumed to be this new directory (e.g. `myproj/gh-pages`).
