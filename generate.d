@@ -2,6 +2,7 @@ import std.algorithm;
 import std.array;
 import std.file;
 import std.getopt;
+import std.parallelism;
 import std.path;
 import std.process;
 import std.range;
@@ -29,9 +30,9 @@ string[] parseModuleFile(string path)
 	return modules.map!(modName => modName.replace(".", "/") ~ ".d")().array();
 }
 
-string generatedPath(in char[] modName, in char[] separator)
+string generatedName(string modName, string separator)
 {
-	return (modName.stripExtension().replace("/", separator) ~ ".html").idup;
+	return modName.stripExtension().replace("/", separator) ~ ".html";
 }
 
 auto usage = `Generate bootDoc documentation pages for a project
@@ -47,6 +48,8 @@ Options (defaults in brackets):
   --settings=<path>    path to settings file. ["settings.ddoc"]
   --separator=<string> package separator for output HTML files. ["."]
   --verbose            print information during the generation process.
+  --parallel           generate in parallel mode. Substantially decreases
+                       generation speed on multi-core machines.
   --dmd=<string>       name of compiler frontend to use for generation. ["dmd"]
   --extra=<path>       path to extra module. Can be used multiple times.
 
@@ -81,14 +84,16 @@ void main(string[] args)
 	string separator = ".";
 	string dmd = "dmd";
 	bool verbose = false;
-	
+	bool parallelMode = false;
 	string[] extras;
+	
 	getopt(args, config.passThrough,
 		"bootdoc", &bootDoc,
 		"modules", &moduleFile,
 		"settings", &settingsFile,
 		"separator", &separator,
 		"verbose", &verbose,
+		"parallel", &parallelMode,
 		"dmd", &dmd,
 		"extra", (string _, string path){ extras ~= path; }
 	);
@@ -99,49 +104,49 @@ void main(string[] args)
 		return;
 	}
 	
-	string root = args[1];
+	immutable root = args[1];
+	immutable passThrough =
+		args.length > 2 ?
+		args[2 .. $].map!(arg => format(`"%s"`, arg))().array().join(" ") :
+		null;
+
+	immutable bootDocFile = format("%s/bootdoc.ddoc", bootDoc);
 	
-	string passThrough = null;
-	if(args.length > 2)
+	bool generate(string name, string inputPath)
 	{
-		passThrough = args[2 .. $].map!(arg => format(`"%s"`, arg))().array().join(" ");
-	}
-	
-	auto modPaths = parseModuleFile(moduleFile);
-	
-	auto bootDocFile = format("%s/bootdoc.ddoc", bootDoc);
-	
-	bool generate(in char[] path, bool prependRoot)
-	{
-		auto outputPath = generatedPath(path, separator);
-		
-		auto inputPath = prependRoot? format("%s/%s", root, path) : path;
+		auto outputName = generatedName(name, separator);
 		
 		auto command = format(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
-			dmd, root, outputPath, inputPath, settingsFile, bootDocFile, moduleFile);
+			dmd, root, outputName, inputPath, settingsFile, bootDocFile, moduleFile);
 		
 		if(passThrough !is null)
 		{
 			command ~= passThrough;
 		}
 		
-		if(verbose) writefln("%s => %s\n  [%s]\n", path, outputPath, command);
+		if(verbose) writefln("%s => %s\n  [%s]\n", name, outputName, command);
 		
-		if(system(command) != 0)
-			return false;
-		
-		return true;
+		return system(command) == 0;
 	}
 	
-	foreach(path; modPaths)
-	{
-		if(!generate(path, true))
-			return;
-	}
+	auto modList = parseModuleFile(moduleFile);
 	
-	foreach(path; extras)
+	if(parallelMode)
 	{
-		if(!generate(path, false))
-			return;
+		immutable workUnitSize = 1;
+		
+		foreach(name; parallel(modList, workUnitSize))
+			generate(name, format("%s/%s", root, name));
+		
+		foreach(name; parallel(extras, workUnitSize))
+			generate(name, name);
+	}
+	else
+	{
+		foreach(name; modList)
+			generate(name, format("%s/%s", root, name));
+		
+		foreach(name; extras)
+			generate(name, name);
 	}
 }
