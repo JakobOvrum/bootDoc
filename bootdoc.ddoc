@@ -144,14 +144,14 @@ DDOC = <!DOCTYPE html>
 	</body>
 </html>
 
-DDOC_DECL = <hr><div class="row-fluid declaration"><h3>$0</h3></div>
-
-
+DDOC_DECL    = <hr><div class="row-fluid declaration"><h3>$0</h3></div>
+DDOC_DECL_DD = <div class="declaration-content">$0</div>
+DDOC_PSYMBOL = <a class="symbol symbol-anchor" name="$0" href="#$0">$0</a>
+DDOC_SYMBOL = <s>$0</s>
 DDOC_SUMMARY = <p>$0</p>
 
-DDOC_SECTIONS  = <dl>$0</dl>
-SECTION     = <dt>$1</dt><dd>$2</dd>
-
+DDOC_SECTIONS    = <dl>$0</dl>
+SECTION          = <dt>$1</dt><dd>$2</dd>
 DDOC_SECTION_H   = <dt>$0</dt><dd>
 DDOC_SECTION     = $0</dd>
 DDOC_DESCRIPTION = <p>$0</p>
@@ -170,15 +170,12 @@ DDOC_STANDARDS   = $(SECTION Standards, $0)
 DDOC_THROWS	     = $(SECTION Throws, $0)
 DDOC_VERSION     = $(SECTION Version, $0)
 
-
 DDOC_MEMBERS = $0
 OFFSETMEMBERS = <div class="offset1 member-list">$0</div>
 DDOC_STRUCT_MEMBERS = $(OFFSETMEMBERS $0)
 DDOC_CLASS_MEMBERS= $(OFFSETMEMBERS $0)
 DDOC_TEMPLATE_MEMBERS = $(OFFSETMEMBERS $0)
 DDOC_ENUM_MEMBERS = $(OFFSETMEMBERS $0)
-
-DDOC_DECL_DD = <div class="declaration-content">$0</div>
 
 DDOC_PARAMS = $(SECTION Parameters, <table class="table table-condensed table-bordered">$0</table>)
 DDOC_PARAM_ROW  = <tr>$0</tr>
@@ -190,9 +187,6 @@ D_KEYWORD = $(DDOC_KEYWORD $0)
 D_STRING = <span class="d_string">$0</span>
 D_PARAM = $(B $0)
 D_COMMENT = <span class="d_comment">$0</span>
-
-DDOC_PSYMBOL = <a class="symbol symbol-anchor" name="$0" href="#$0">$0</a>
-DDOC_SYMBOL = <s>$0</s>
 
 RPAREN = )
 LPAREN = (

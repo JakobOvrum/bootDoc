@@ -303,7 +303,9 @@ function setupGotoSymbolForm(typeaheadData) {
 		$input.blur();
 	});
 	
-	$input.typeahead({ 'source': typeaheadData });
+	$input.typeahead({
+		'source': typeaheadData
+	});
 	
 	$form.removeClass('hidden');
 }
