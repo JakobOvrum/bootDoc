@@ -293,18 +293,26 @@ function setupGotoSymbolForm(typeaheadData) {
 	var $form = $('#gotosymbol');
 	var $input = $form.children('input');
 	
+	function go(target) {
+		window.location.hash = target;
+		highlightSymbol('#' + target);
+		$input.blur();
+	}
+	
 	$form.submit(function(event) {
 		event.preventDefault();
 		
-		window.location.hash = $input.val();
-		highlightSymbol('#' + $input.val());
+		go($input.val());
 		
 		$input.val('');
-		$input.blur();
 	});
 	
 	$input.typeahead({
-		'source': typeaheadData
+		'source': typeaheadData,
+		'updater': function(item) {
+			go(item);
+			return '';
+		}
 	});
 	
 	$form.removeClass('hidden');
