@@ -179,7 +179,7 @@ DDOC_ENUM_MEMBERS = $(OFFSETMEMBERS $0)
 
 DDOC_PARAMS = $(SECTION Parameters, <table class="table table-condensed table-bordered">$0</table>)
 DDOC_PARAM_ROW  = <tr>$0</tr>
-DDOC_PARAM_ID   = <td class="span2">$0</td>
+DDOC_PARAM_ID   = <td>$0</td>
 DDOC_PARAM_DESC = <td>$0</td>
 
 DDOC_KEYWORD = <span class="d_keyword">$0</span>
