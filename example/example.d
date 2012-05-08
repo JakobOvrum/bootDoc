@@ -34,4 +34,14 @@ struct S
 	
 	/// Etiam gravida odio sed massa.
 	static S foo();
+	
+	///
+	struct S2
+	{
+		///
+		int a;
+		
+		///
+		void foo();
+	}
 }

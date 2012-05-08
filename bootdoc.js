@@ -254,6 +254,8 @@ function populateSymbolList(tree) {
 				}
 				
 				var $list = $node.find('ul');
+				$list.attr('id', anchorName + '_member-list');
+				$list.hide(); // Default to closed.
 				traverser(node.members, $list, anchorName + '.');
 			} else {
 				var $node = $(leafNode(node.name, anchorName, node.type));
@@ -274,8 +276,11 @@ function populateSymbolList(tree) {
  * Set the current symbol to highlight.
  */
 function highlightSymbol(targetId) {
-	var escapedTargetId = targetId.replace(/\./g, '\\.');
-	var $target = $(escapedTargetId).parent();
+	function escapeId(id) {
+		return id.replace(/\./g, '\\.');
+	}
+
+	var $target = $(escapeId(targetId)).parent();
 	
 	if(window.currentlyHighlightedSymbol) {
 		window.currentlyHighlightedSymbol.removeClass('highlighted-symbol');
@@ -284,6 +289,20 @@ function highlightSymbol(targetId) {
 	$target.addClass('highlighted-symbol');
 	
 	window.currentlyHighlightedSymbol = $target;
+	
+	// Open symbol list down to highlighted symbol.	
+	function eatHead(name) {
+		var i = name.lastIndexOf('.');
+		if(i != -1) {
+			return name.slice(0, i);
+		}
+	}
+	
+	var nodeName = eatHead(targetId);
+	while(typeof nodeName !== 'undefined') {
+		$(escapeId(nodeName) + '_member-list').show();
+		nodeName = eatHead(nodeName);
+	}
 }
 
 /**
