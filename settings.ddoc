@@ -1,7 +1,7 @@
 PROJECTNAME = Example Project
 REFERENCETOP = example.example.html
 REPOSRCTREE = http://github.com/JakobOvrum/bootDoc/tree/master
-TITLEBARTEXT = <a href="htps://github.com/JakobOvrum/bootDoc">Github Page</a>
+TITLEBARTEXT = <a href="https://github.com/JakobOvrum/bootDoc">Github Page</a>
 RESOURCEROOT =
 PACKAGESEP = .
 FAVICON = $(RESOURCEROOT)assets/ico/favicon.ico
