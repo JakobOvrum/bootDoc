@@ -52,6 +52,7 @@ Options (defaults in brackets):
                        generation speed on multi-core machines.
   --dmd=<string>       name of compiler frontend to use for generation. ["dmd"]
   --extra=<path>       path to extra module. Can be used multiple times.
+  --output=<path>      path to output generated files to.
 
 Options not listed above are passed to the D compiler on generation.
 
@@ -86,6 +87,7 @@ void main(string[] args)
 	bool verbose = false;
 	bool parallelMode = false;
 	string[] extras;
+	string outputDir = ".";
 	
 	getopt(args, config.passThrough,
 		"bootdoc", &bootDoc,
@@ -95,7 +97,8 @@ void main(string[] args)
 		"verbose", &verbose,
 		"parallel", &parallelMode,
 		"dmd", &dmd,
-		"extra", (string _, string path){ extras ~= path; }
+		"extra", (string _, string path){ extras ~= path; },
+		"output", &outputDir
 	);
 	
 	if(args.length < 2)
@@ -114,7 +117,7 @@ void main(string[] args)
 	
 	bool generate(string name, string inputPath)
 	{
-		auto outputName = generatedName(name, separator);
+		auto outputName = buildPath(outputDir, generatedName(name, separator));
 		
 		auto command = format(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
 			dmd, root, outputName, inputPath, settingsFile, bootDocFile, moduleFile);
@@ -139,7 +142,7 @@ void main(string[] args)
 			generate(name, format("%s/%s", root, name));
 		
 		foreach(name; parallel(extras, workUnitSize))
-			generate(name, name);
+			generate(baseName(name), name);
 	}
 	else
 	{
@@ -147,6 +150,6 @@ void main(string[] args)
 			generate(name, format("%s/%s", root, name));
 		
 		foreach(name; extras)
-			generate(name, name);
+			generate(baseName(name), name);
 	}
 }
