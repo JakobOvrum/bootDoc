@@ -77,7 +77,7 @@ and its HTML output is put in example_example.html. The output
 is configured with settings.ddoc, read from the working directory.
 `;
 
-void main(string[] args)
+int main(string[] args)
 {
 	string bootDoc = "bootDoc";
 	string moduleFile = "modules.ddoc";
@@ -104,7 +104,7 @@ void main(string[] args)
 	if(args.length < 2)
 	{
 		writefln(usage, args[0]);
-		return;
+		return 2;
 	}
 	
 	immutable root = args[1];
@@ -152,4 +152,6 @@ void main(string[] args)
 		foreach(name; extras)
 			generate(baseName(name), name);
 	}
+	
+	return 0;
 }
