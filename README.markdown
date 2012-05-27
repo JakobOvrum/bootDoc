@@ -26,7 +26,8 @@ Usage with Github Pages
 -----------------------------------
 
  * Create a gh-pages branch to host the generated documentation ([instructions here](http://help.github.com/pages/#project_pages_manually)).
-  - For the purposes of this guide, we will assume this is an empty branch in its own repository in a subdirectory of the repository containing the source files.
+  - For the purposes of this guide, we will assume this is an empty branch in its own repository in a subdirectory of the repository containing the source files. Since we're using a clean slate branch which still depends on the contents of the master branch (or whatever branch you want to
+  generate documentation for), two separate repositories are required.
   - For example, if your project repository is in a directory `myproj`, we will assume your gh-pages repository is in `myproj/gh-pages`.
   - The working directory of the following commands is assumed to be this new directory (e.g. `myproj/gh-pages`).
  * Add *bootDoc* as a git-submodule to your gh-pages repository:
