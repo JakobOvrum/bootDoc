@@ -40,11 +40,11 @@ Usage with Github Pages
    cp bootDoc/modules.ddoc modules.ddoc;
    ```
  * Edit `settings.ddoc` and `modules.ddoc` to match your project's profile ([see below](#usage-in-general)).
- * Run the generation script, passing the root location of your sources: `rdmd bootDoc/generate.d ..`.
+ * Run the generation tool, passing the root location of your sources: `rdmd bootDoc/generate.d ..`.
   - The list of modules is read from `modules.ddoc`. For example, using the above command, if your `modules.ddoc` has one entry `$(MODULE example.example)`, then `example.example.html` will be generated from `../example/example.d` (aka `myproj/example/example.d`).
-  - If you have an index file tracked on the gh-pages branch instead of among the sources, pass it to the generation script using `--extra=index.d`. Any number of extra files can be passed this way.
+  - If you have an index file tracked on the gh-pages branch instead of among the sources, pass it to the generation tool using `--extra=index.d`. Any number of extra files can be passed this way.
  * Push your newly generated HTML files.
-  - To update the documentation, run the generation script again.
+  - To update the documentation, run the generation tool again.
 
 Usage in General
 -----------------------------------
@@ -55,7 +55,7 @@ documented [here](https://github.com/JakobOvrum/bootDoc/wiki/settings.ddoc). `mo
 a candyDoc-style list of all the modules in your project, and is documented
 [here](https://github.com/JakobOvrum/bootDoc/wiki/modules.ddoc).
 
-Pages are generated using the included script `generate.d`. Run it without arguments to
+Pages are generated using the included tool `generate.d`. Run it without arguments to
 see an overview of how to use it.
 
 License
