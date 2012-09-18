@@ -1,5 +1,6 @@
 #!/usr/bin/env rdmd
 
+import core.sync.mutex;
 import std.algorithm;
 import std.array;
 import std.file;
@@ -116,6 +117,7 @@ int main(string[] args)
 		null;
 
 	immutable bootDocFile = format("%s/bootdoc.ddoc", bootDoc);
+	Mutex outputMutex = new Mutex();
 	
 	bool generate(string name, string inputPath)
 	{
@@ -129,7 +131,15 @@ int main(string[] args)
 			command ~= passThrough;
 		}
 		
-		if(verbose) writefln("%s => %s\n  [%s]\n", name, outputName, command);
+		if(verbose)
+		{
+			outputMutex.lock();
+
+			scope (exit)
+				outputMutex.unlock();
+
+			writefln("%s => %s\n  [%s]\n", name, outputName, command);
+		}
 		
 		return system(command) == 0;
 	}
