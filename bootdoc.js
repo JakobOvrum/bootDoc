@@ -157,7 +157,7 @@ function buildSymbolTree() {
 			var $decl = $(this);
 			var text = $decl.text();
 			
-			var $symbol = $decl.find('.symbol');
+			var $symbol = $decl.find('.symbol-anchor');
 			var symbol;
 			if($symbol.length == 0) { // Special member (e.g. constructor).
 				symbol = text.match(specialMemberRegex)[0];

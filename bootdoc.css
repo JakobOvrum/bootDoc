@@ -1,5 +1,6 @@
 ﻿.symbol {
 	padding-top: 40px;
+	margin-top: -40px;
 }
 
 .sidebar-list-entry {
