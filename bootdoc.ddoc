@@ -146,7 +146,7 @@ DDOC = <!DOCTYPE html>
 
 DDOC_DECL    = <hr><div class="row-fluid declaration"><h3>$0</h3></div>
 DDOC_DECL_DD = <div class="declaration-content">$0</div>
-DDOC_PSYMBOL = <span class="symbol-target" id="$0"></span><a class="symbol-link" href="#$0">$0</a>
+DDOC_PSYMBOL = <span class="symbol-target" id="$0">&nbsp;</span><a class="symbol-link" href="#$0">$0</a>
 DDOC_SYMBOL = <s>$0</s>
 DDOC_SUMMARY = <p>$0</p>
 

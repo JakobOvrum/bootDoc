@@ -1,6 +1,8 @@
 ﻿.symbol-target {
 	padding-top: 40px;
 	margin-top: -40px;
+	width: 1px; /* '0' will not work for Opera */
+	display: inline-block;
 }
 
 .sidebar-list-entry {
