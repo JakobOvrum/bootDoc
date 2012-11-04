@@ -157,12 +157,12 @@ function buildSymbolTree() {
 			var $decl = $(this);
 			var text = $decl.text();
 			
-			var $symbol = $decl.find('.symbol-anchor');
+			var $symbolLink = $decl.find('.symbol-link');
 			var symbol;
-			if($symbol.length == 0) { // Special member (e.g. constructor).
+			if($symbolLink.length == 0) { // Special member (e.g. constructor).
 				symbol = text.match(specialMemberRegex)[0];
 			} else {
-				symbol = $symbol.html();
+				symbol = $symbolLink.html();
 			}
 			
 			function fillSubTree(type) {
@@ -171,7 +171,7 @@ function buildSymbolTree() {
 					'type': type,
 					'members': new Array(),
 					'decl': $decl,
-					'symbolNode': $symbol
+					'symbolLinkNode': $symbolLink,
 				};
 				
 				parentNode.push(subTree);
@@ -183,7 +183,7 @@ function buildSymbolTree() {
 					'name': symbol,
 					'type': type,
 					'decl': $decl,
-					'symbolNode': $symbol
+					'symbolLinkNode': $symbolLink,
 				};
 				
 				parentNode.push(leaf);
@@ -224,12 +224,12 @@ function buildSymbolTree() {
 function populateSymbolList(tree) {	
 	function expandableNode(name, anchor, type) {
 		return '<li class="dropdown sidebar-list-entry"><span>' +
-		       '<i class="ddoc-icon-' + type + '"></i><a class="symbol-anchor" href="#' + anchor + '" title="' + name + '">' + name + '</a>' +
+		       '<i class="ddoc-icon-' + type + '"></i><a class="symbol-link" href="#' + anchor + '" title="' + name + '">' + name + '</a>' +
 		       '</span><ul class="custom-icon-list"></ul></li>';
 	}
 	
 	function leafNode(name, anchor, type) {
-		return '<li class="sidebar-list-entry"><span><i class="ddoc-icon-' + type + '"></i><a class="symbol-anchor" href="#' + anchor + '" title="' + name + '">' + name + '</a></span></li>';
+		return '<li class="sidebar-list-entry"><span><i class="ddoc-icon-' + type + '"></i><a class="symbol-link" href="#' + anchor + '" title="' + name + '">' + name + '</a></span></li>';
 	}
 	
 	var anchorNames = new Array();
@@ -241,8 +241,8 @@ function populateSymbolList(tree) {
 			var anchorName = anchorTail + node.name;
 			anchorNames.push(anchorName);
 			
-			node.symbolNode.attr('id', anchorName);
-			node.symbolNode.attr('href', '#' + anchorName);
+			node.symbolLinkNode.attr('id', anchorName);
+			node.symbolLinkNode.attr('href', '#' + anchorName);
 			
 			if(isTree) {
 				var $node = $(expandableNode(node.name, anchorName, node.type));
@@ -353,7 +353,7 @@ $(document).ready(function() {
 	}
 	
 	// Setup symbol anchor highlighting.
-	$('.symbol-anchor').click(function() {
+	$('.symbol-link').click(function() {
 		var targetId = $(this).attr('href');
 		highlightSymbol(targetId);
 	});
