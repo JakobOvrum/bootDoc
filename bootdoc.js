@@ -165,6 +165,7 @@ function buildSymbolTree() {
 				symbol = $symbolLink.html();
 			}
 
+			var $symbolTarget = $decl.find('.symbol-target');
 			function fillSubTree(type) {
 				var subTree = {
 					'name': symbol,
@@ -172,6 +173,7 @@ function buildSymbolTree() {
 					'members': new Array(),
 					'decl': $decl,
 					'symbolLinkNode': $symbolLink,
+					'symbolTargetNode': $symbolTarget
 				};
 
 				parentNode.push(subTree);
@@ -184,6 +186,7 @@ function buildSymbolTree() {
 					'type': type,
 					'decl': $decl,
 					'symbolLinkNode': $symbolLink,
+					'symbolTargetNode': $symbolTarget
 				};
 
 				parentNode.push(leaf);
@@ -241,7 +244,7 @@ function populateSymbolList(tree) {
 			var anchorName = anchorTail + node.name;
 			anchorNames.push(anchorName);
 
-			node.symbolLinkNode.attr('id', anchorName);
+			node.symbolTargetNode.attr('id', anchorName);
 			node.symbolLinkNode.attr('href', '#' + anchorName);
 
 			if(isTree) {
