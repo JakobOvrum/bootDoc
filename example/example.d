@@ -11,6 +11,13 @@ void foo();
  */
 int bar(int a, int b);
 
+///
+void baz(immutable(int) a);
+/// Ditto
+void baz(const(int) a);
+/// Ditto
+void baz(int a);
+
 /// Nulla eu eros et neque aliquam fermentum dictum eu turpis.
 struct S
 {
@@ -18,10 +25,10 @@ struct S
 	 * Params:
 	 *    a = Donec massa augue, mattis id.
 	 */
-	this(int a);
+	this(int a) pure{}
 	
 	///
-	immutable this(int a);
+	immutable this (int a);
 	
 	///
 	@disable this();

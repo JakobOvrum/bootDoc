@@ -146,7 +146,7 @@ var classRegex = /^class /;
 var templateRegex = /^template /;
 var functionRegex = /\);\s*$/m;
 var propertyRegex = /@property/m;
-var specialMemberRegex = /^([^(]+)/;
+var constructorRegex = /^[^(]*?this\(+/;
 
 /**
  * Build a table out of all symbols declared in the current module.
@@ -158,14 +158,17 @@ function buildSymbolTree() {
 			var text = $decl.text();
 
 			var $symbolLink = $decl.find('.symbol-link');
+			var $symbolTarget = $decl.find('.symbol-target');
+			
 			var symbol;
 			if($symbolLink.length == 0) { // Special member (e.g. constructor).
-				symbol = text.match(specialMemberRegex)[0];
+				if(constructorRegex.test(text)) {
+					symbol = 'this';
+				}
 			} else {
 				symbol = $symbolLink.html();
 			}
-
-			var $symbolTarget = $decl.find('.symbol-target');
+			
 			function fillSubTree(type) {
 				var subTree = {
 					'name': symbol,
@@ -191,8 +194,10 @@ function buildSymbolTree() {
 
 				parentNode.push(leaf);
 			}
-
-			if(enumRegex.test(text)) {
+			
+			if(symbol == 'this') {
+				addLeaf('constructor');
+			} else if(enumRegex.test(text)) {
 				fillSubTree('enum');
 			} else if(structRegex.test(text)) {
 				fillSubTree('struct');
@@ -243,6 +248,21 @@ function populateSymbolList(tree) {
 			var isTree = typeof node.members !== 'undefined';
 			var anchorName = anchorTail + node.name;
 			anchorNames.push(anchorName);
+
+			if(node.type == 'constructor') { // Constructor fixup.
+				var $decl = node.decl;
+
+				// Bare DDOC_PSYMBOL
+				var symbolTemplate = '<span class="symbol-target">&nbsp;</span><a class="symbol-link">this</a>';
+
+				var fixedSymbol = $decl.html().replace(/this/, symbolTemplate);
+				$decl.html(fixedSymbol);
+
+				node.symbolTargetNode = $decl.find('.symbol-target');
+				node.symbolLinkNode = $decl.find('.symbol-link');
+				
+				node.type = 'function'; // Use the same list icon as functions.
+			}
 
 			node.symbolTargetNode.attr('id', anchorName);
 			node.symbolLinkNode.attr('href', '#' + anchorName);
