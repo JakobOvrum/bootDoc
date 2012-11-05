@@ -3,6 +3,7 @@
 import core.sync.mutex;
 import std.algorithm;
 import std.array;
+import std.exception;
 import std.file;
 import std.getopt;
 import std.parallelism;
@@ -15,18 +16,14 @@ import std.string;
 
 string[] parseModuleFile(string path)
 {
-	if(!exists(path))
-	{
-		throw new Exception(format("Module file could not be found (%s)", path));
-	}
+	enforce(exists(path), xformat("Module file could not be found (%s)", path));
 	
 	auto modPattern = regex(`\$\(MODULE\s+([^,)]+)`);
 	
 	string[] modules;
 	foreach(line; File(path).byLine())
 	{
-		auto m = match(line, modPattern);
-		if(m)
+		if(auto m = match(line, modPattern))
 			modules ~= m.captures[1].idup;
 	}
 	
@@ -113,17 +110,17 @@ int main(string[] args)
 	immutable root = args[1];
 	immutable passThrough =
 		args.length > 2 ?
-		args[2 .. $].map!(arg => format(`"%s"`, arg))().array().join(" ") :
+		args[2 .. $].map!(arg => xformat(`"%s"`, arg))().array().join(" ") :
 		null;
 
-	immutable bootDocFile = format("%s/bootdoc.ddoc", bootDoc);
+	immutable bootDocFile = xformat("%s/bootdoc.ddoc", bootDoc);
 	Mutex outputMutex = new Mutex();
 	
 	bool generate(string name, string inputPath)
 	{
 		auto outputName = buildPath(outputDir, generatedName(name, separator));
 		
-		auto command = format(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
+		auto command = xformat(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
 			dmd, root, outputName, inputPath, settingsFile, bootDocFile, moduleFile);
 		
 		if(passThrough !is null)
@@ -144,14 +141,14 @@ int main(string[] args)
 		return system(command) == 0;
 	}
 	
-	auto modList = parseModuleFile(moduleFile);
+	const modList = parseModuleFile(moduleFile);
 	
 	if(parallelMode)
 	{
-		immutable workUnitSize = 1;
+		enum workUnitSize = 1;
 		
 		foreach(name; parallel(modList, workUnitSize))
-			generate(name, format("%s/%s", root, name));
+			generate(name, xformat("%s/%s", root, name));
 		
 		foreach(name; parallel(extras, workUnitSize))
 			generate(baseName(name), name);
@@ -159,7 +156,7 @@ int main(string[] args)
 	else
 	{
 		foreach(name; modList)
-			generate(name, format("%s/%s", root, name));
+			generate(name, xformat("%s/%s", root, name));
 		
 		foreach(name; extras)
 			generate(baseName(name), name);
