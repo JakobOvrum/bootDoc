@@ -18,18 +18,33 @@ struct Module
 {
 	string filePath, fileBaseName;
 
-	string getFilePath(string root) const
+	string rootPackage, packageName, moduleName;
+
+
+	string getFilePath(in char[] root) const
 	{
 		return filePath ? filePath : xformat("%s/%s", root, fileBaseName);
 	}
 
-	string getGeneratedName(string separator) const
+	string getGeneratedName(in char[] separator) const
 	{
 		return fileBaseName.stripExtension().replace("/", separator) ~ ".html";
 	}
 }
 
-const(Module)[] parseModuleFile(string path)
+string getPackageDDocFilePath(in char[] packageName, in char[] tempFolder)
+{
+	return buildPath(tempFolder, packageName ~ ".ddoc");
+}
+
+string getPackageDDocFileContent(in char[] packageName)
+{
+	// Don't place macro definition in the first line because it will be ignored.
+	return xformat("\nTHISPACKAGE=%s\nTHISROOTPACKAGE=%s\n",
+		packageName, packageName.findSplitBefore(".")[0]);
+}
+
+const(Module)[] parseModuleFile(in string path)
 {
 	enforce(exists(path), xformat("Module file could not be found (%s)", path));
 
@@ -42,9 +57,12 @@ const(Module)[] parseModuleFile(string path)
 			modules ~= m.captures[1].idup;
 	}
 
-	return modules
-		.map!(modName => Module(
-			null, modName.splitter('.').join("/") ~ ".d"
+	return modules.map!(name => name.splitter('.').array())
+		.map!(divided => Module(
+			null, divided.join("/") ~ ".d",
+			divided.length > 1 ? divided[0] : null,
+			divided.length > 1 ? divided[0 .. $-1].join(".") : null,
+			divided[$-1]
 		 ))().array();
 }
 
@@ -129,12 +147,25 @@ int main(string[] args)
 	immutable bootDocFile = xformat("%s/bootdoc.ddoc", bootDoc);
 	Mutex outputMutex = new Mutex();
 
+	immutable tempFolder = buildPath(tempDir(), "bootDoc-temp");
+	if(exists(tempFolder))
+		rmdirRecurse(tempFolder);
+	mkdir(tempFolder);
+	scope(exit) rmdirRecurse(tempFolder);
+
+	immutable byPackageDocFilePrefix = buildPath(tempFolder, "package-");
+
 	bool generate(in Module mod)
 	{
 		auto outputName = buildPath(outputDir, mod.getGeneratedName(separator));
 
 		auto command = xformat(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
 			dmd, root, outputName, mod.getFilePath(root), settingsFile, bootDocFile, moduleFile);
+
+		if(mod.packageName)
+		{
+			command ~= xformat(`"%s" `, mod.packageName.getPackageDDocFilePath(tempFolder));
+		}
 
 		if(passThrough !is null)
 		{
@@ -156,6 +187,12 @@ int main(string[] args)
 
 	const modList = parseModuleFile(moduleFile) ~
 		extras.map!(name => Module(name, baseName(name)))().array();
+
+	foreach(mod; modList.filter!`a.packageName`())
+		std.file.write(
+			mod.packageName.getPackageDDocFilePath(tempFolder),
+			mod.packageName.getPackageDDocFileContent()
+		);
 
 	if(parallelMode)
 	{
