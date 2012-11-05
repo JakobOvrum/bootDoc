@@ -16,7 +16,17 @@ import std.string;
 
 struct Module
 {
-	string name;
+	string filePath, fileBaseName;
+
+	string getFilePath(string root) const
+	{
+		return filePath ? filePath : xformat("%s/%s", root, fileBaseName);
+	}
+
+	string getGeneratedName(string separator) const
+	{
+		return fileBaseName.stripExtension().replace("/", separator) ~ ".html";
+	}
 }
 
 const(Module)[] parseModuleFile(string path)
@@ -32,12 +42,10 @@ const(Module)[] parseModuleFile(string path)
 			modules ~= m.captures[1].idup;
 	}
 
-	return modules.map!(modName => Module(modName.replace(".", "/") ~ ".d"))().array();
-}
-
-string generatedName(string modName, string separator)
-{
-	return modName.stripExtension().replace("/", separator) ~ ".html";
+	return modules
+		.map!(modName => Module(
+			null, modName.splitter('.').join("/") ~ ".d"
+		 ))().array();
 }
 
 auto usage = `Generate bootDoc documentation pages for a project
@@ -121,12 +129,12 @@ int main(string[] args)
 	immutable bootDocFile = xformat("%s/bootdoc.ddoc", bootDoc);
 	Mutex outputMutex = new Mutex();
 
-	bool generate(Module mod, string inputPath)
+	bool generate(in Module mod)
 	{
-		auto outputName = buildPath(outputDir, generatedName(mod.name, separator));
+		auto outputName = buildPath(outputDir, mod.getGeneratedName(separator));
 
 		auto command = xformat(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
-			dmd, root, outputName, inputPath, settingsFile, bootDocFile, moduleFile);
+			dmd, root, outputName, mod.getFilePath(root), settingsFile, bootDocFile, moduleFile);
 
 		if(passThrough !is null)
 		{
@@ -140,31 +148,26 @@ int main(string[] args)
 			scope (exit)
 				outputMutex.unlock();
 
-			writefln("%s => %s\n  [%s]\n", mod.name, outputName, command);
+			writefln("%s => %s\n  [%s]\n", mod.fileBaseName, outputName, command);
 		}
 
 		return system(command) == 0;
 	}
 
-	const modList = parseModuleFile(moduleFile);
+	const modList = parseModuleFile(moduleFile) ~
+		extras.map!(name => Module(name, baseName(name)))().array();
 
 	if(parallelMode)
 	{
 		enum workUnitSize = 1;
 
 		foreach(mod; parallel(modList, workUnitSize))
-			generate(mod, xformat("%s/%s", root, mod.name));
-
-		foreach(name; parallel(extras, workUnitSize))
-			generate(Module(baseName(name)), name);
+			generate(mod);
 	}
 	else
 	{
 		foreach(mod; modList)
-			generate(mod, xformat("%s/%s", root, mod.name));
-
-		foreach(name; extras)
-			generate(Module(baseName(name)), name);
+			generate(mod);
 	}
 
 	return 0;
