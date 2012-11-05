@@ -14,7 +14,12 @@ import std.regex;
 import std.stdio;
 import std.string;
 
-string[] parseModuleFile(string path)
+struct Module
+{
+	string name;
+}
+
+const(Module)[] parseModuleFile(string path)
 {
 	enforce(exists(path), xformat("Module file could not be found (%s)", path));
 
@@ -27,7 +32,7 @@ string[] parseModuleFile(string path)
 			modules ~= m.captures[1].idup;
 	}
 
-	return modules.map!(modName => modName.replace(".", "/") ~ ".d")().array();
+	return modules.map!(modName => Module(modName.replace(".", "/") ~ ".d"))().array();
 }
 
 string generatedName(string modName, string separator)
@@ -116,9 +121,9 @@ int main(string[] args)
 	immutable bootDocFile = xformat("%s/bootdoc.ddoc", bootDoc);
 	Mutex outputMutex = new Mutex();
 
-	bool generate(string name, string inputPath)
+	bool generate(Module mod, string inputPath)
 	{
-		auto outputName = buildPath(outputDir, generatedName(name, separator));
+		auto outputName = buildPath(outputDir, generatedName(mod.name, separator));
 
 		auto command = xformat(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
 			dmd, root, outputName, inputPath, settingsFile, bootDocFile, moduleFile);
@@ -135,7 +140,7 @@ int main(string[] args)
 			scope (exit)
 				outputMutex.unlock();
 
-			writefln("%s => %s\n  [%s]\n", name, outputName, command);
+			writefln("%s => %s\n  [%s]\n", mod.name, outputName, command);
 		}
 
 		return system(command) == 0;
@@ -147,19 +152,19 @@ int main(string[] args)
 	{
 		enum workUnitSize = 1;
 
-		foreach(name; parallel(modList, workUnitSize))
-			generate(name, xformat("%s/%s", root, name));
+		foreach(mod; parallel(modList, workUnitSize))
+			generate(mod, xformat("%s/%s", root, mod.name));
 
 		foreach(name; parallel(extras, workUnitSize))
-			generate(baseName(name), name);
+			generate(Module(baseName(name)), name);
 	}
 	else
 	{
-		foreach(name; modList)
-			generate(name, xformat("%s/%s", root, name));
+		foreach(mod; modList)
+			generate(mod, xformat("%s/%s", root, mod.name));
 
 		foreach(name; extras)
-			generate(baseName(name), name);
+			generate(Module(baseName(name)), name);
 	}
 
 	return 0;
