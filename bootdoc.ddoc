@@ -200,6 +200,33 @@ LUCKY = $(HTTP
 google.com/search?btnI=I%27m+Feeling+Lucky&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=$0,$0)
 D = <span class="inlinecode">$0</span>
 BIGOH = <b><i>&Omicron;</i>(</b>$(D $0)<b><i>)</i></b>
+
+
+__SYMBOLREF0 = <a href="$1.html#$3">$(D $2.$3)</a>
+__SYMBOLREF1 = $(__SYMBOLREF0 $1$(PACKAGESEP)$3, $2.$3, $4)
+__SYMBOLREF2 = $(__SYMBOLREF1 $1$(PACKAGESEP)$3, $2.$3, $4, $5)
+__SYMBOLREF3 = $(__SYMBOLREF2 $1$(PACKAGESEP)$3, $2.$3, $4, $5, $6, $7)
+__SYMBOLREF4 = $(__SYMBOLREF3 $1$(PACKAGESEP)$3, $2.$3, $4, $5, $6, $7, $8)
+__SYMBOLREF5 = $(__SYMBOLREF4 $1$(PACKAGESEP)$3, $2.$3, $4, $5, $6, $7, $8, $9)
+__SYMBOLREF6 = $(__SYMBOLREF5 $1$(PACKAGESEP)$3, $2.$3, $4, $5, $6, $7, $8, $9, $10)
+
+UNPACKAGEDREF     = $(__SYMBOLREF0 $1, $1, $2)
+
+CROSSPACKAGEREF   = $(__SYMBOLREF1 $1, $1, $2, $3)
+CROSSPACKAGEREF2  = $(__SYMBOLREF2 $1, $1, $2, $3, $4)
+CROSSPACKAGEREF3  = $(__SYMBOLREF3 $1, $1, $2, $3, $4, $5)
+CROSSPACKAGEREF4  = $(__SYMBOLREF4 $1, $1, $2, $3, $4, $5, $6, $7)
+CROSSPACKAGEREF5  = $(__SYMBOLREF5 $1, $1, $2, $3, $4, $5, $6, $7, $8)
+CROSSPACKAGEREF6  = $(__SYMBOLREF6 $1, $1, $2, $3, $4, $5, $6, $7, $8, $9)
+
+DEFAULTPACKAGEREF   = $(__SYMBOLREF1 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2)
+DEFAULTPACKAGEREF2  = $(__SYMBOLREF2 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3)
+DEFAULTPACKAGEREF3  = $(__SYMBOLREF3 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3, $4)
+DEFAULTPACKAGEREF4  = $(__SYMBOLREF4 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3, $4, $5, $6)
+DEFAULTPACKAGEREF5  = $(__SYMBOLREF5 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3, $4, $5, $6, $7)
+DEFAULTPACKAGEREF6  = $(__SYMBOLREF6 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3, $4, $5, $6, $7, $8)
+
+
 LREF = <a href="#$1">$(D $1)</a>
 BUGZILLA = $(LINK2 http://d.puremagic.com/issues/show_bug.cgi?id=$0, Bugzilla $0)
 PRE = <pre>$0</pre>
