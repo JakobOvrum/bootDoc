@@ -17,16 +17,16 @@ import std.string;
 string[] parseModuleFile(string path)
 {
 	enforce(exists(path), xformat("Module file could not be found (%s)", path));
-	
+
 	auto modPattern = regex(`\$\(MODULE\s+([^,)]+)`);
-	
+
 	string[] modules;
 	foreach(line; File(path).byLine())
 	{
 		if(auto m = match(line, modPattern))
 			modules ~= m.captures[1].idup;
 	}
-	
+
 	return modules.map!(modName => modName.replace(".", "/") ~ ".d")().array();
 }
 
@@ -88,7 +88,7 @@ int main(string[] args)
 	bool parallelMode = false;
 	string[] extras;
 	string outputDir = ".";
-	
+
 	getopt(args, config.passThrough,
 		"bootdoc", &bootDoc,
 		"modules", &moduleFile,
@@ -100,13 +100,13 @@ int main(string[] args)
 		"extra", (string _, string path){ extras ~= path; },
 		"output", &outputDir
 	);
-	
+
 	if(args.length < 2)
 	{
 		writefln(usage, args[0]);
 		return 2;
 	}
-	
+
 	immutable root = args[1];
 	immutable passThrough =
 		args.length > 2 ?
@@ -115,19 +115,19 @@ int main(string[] args)
 
 	immutable bootDocFile = xformat("%s/bootdoc.ddoc", bootDoc);
 	Mutex outputMutex = new Mutex();
-	
+
 	bool generate(string name, string inputPath)
 	{
 		auto outputName = buildPath(outputDir, generatedName(name, separator));
-		
+
 		auto command = xformat(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
 			dmd, root, outputName, inputPath, settingsFile, bootDocFile, moduleFile);
-		
+
 		if(passThrough !is null)
 		{
 			command ~= passThrough;
 		}
-		
+
 		if(verbose)
 		{
 			outputMutex.lock();
@@ -137,19 +137,19 @@ int main(string[] args)
 
 			writefln("%s => %s\n  [%s]\n", name, outputName, command);
 		}
-		
+
 		return system(command) == 0;
 	}
-	
+
 	const modList = parseModuleFile(moduleFile);
-	
+
 	if(parallelMode)
 	{
 		enum workUnitSize = 1;
-		
+
 		foreach(name; parallel(modList, workUnitSize))
 			generate(name, xformat("%s/%s", root, name));
-		
+
 		foreach(name; parallel(extras, workUnitSize))
 			generate(baseName(name), name);
 	}
@@ -157,10 +157,10 @@ int main(string[] args)
 	{
 		foreach(name; modList)
 			generate(name, xformat("%s/%s", root, name));
-		
+
 		foreach(name; extras)
 			generate(baseName(name), name);
 	}
-	
+
 	return 0;
 }
