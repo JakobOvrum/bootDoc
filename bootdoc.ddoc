@@ -193,14 +193,13 @@ RPAREN = )
 LPAREN = (
 LESS = &lt;
 GREATER = &gt;
+D = <span class="inlinecode">$0</span>
+BIGOH = <b><i>&Omicron;</i>(</b>$(D $0)<b><i>)</i></b>
 HTTP = $(LINK2 http://$1,$2)
 HTTPS = $(LINK2 https://$1,$2)
 WEB = $(HTTP $1,$2)
 LUCKY = $(HTTP
 google.com/search?btnI=I%27m+Feeling+Lucky&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=$0,$0)
-D = <span class="inlinecode">$0</span>
-BIGOH = <b><i>&Omicron;</i>(</b>$(D $0)<b><i>)</i></b>
-
 
 __SYMBOLREF0 = <a href="$1.html#$3">$(D $2.$3)</a>
 __SYMBOLREF1 = $(__SYMBOLREF0 $1$(PACKAGESEP)$3, $2.$3, $4)
@@ -240,20 +239,5 @@ RPREF4  = $(__SYMBOLREF4 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4,
 RPREF5  = $(__SYMBOLREF5 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6, $7)
 RPREF6  = $(__SYMBOLREF6 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6, $7, $8)
 
-
 MREF = <a href="#$1">$(D $1)</a>
 LREF = $(MREF $0)
-
-BUGZILLA = $(LINK2 http://d.puremagic.com/issues/show_bug.cgi?id=$0, Bugzilla $0)
-PRE = <pre>$0</pre>
-
-BOOKTABLE = <table cellspacing=0 cellpadding=5 class="table"><caption>$1</caption>$2</table>
-LEADINGROW = <tr class=leadingrow><td colspan=2><b><em>&nbsp;&nbsp;&nbsp;&nbsp;$0</em></b></td></tr>
-TABLE = <table cellspacing=0 cellpadding=5><caption>$1</caption>$2</table>
-TD = <td valign=top>$0</td>
-TDNW = <td valign=top class="donthyphenate">$0</td>
-SUB = <sub>$0</sub>
-
-COLOR = <span style="color:$1">$2</span>
-
-TABLE_SV = <table style="border:1px solid silver;">$0</table>
