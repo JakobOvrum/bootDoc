@@ -200,16 +200,52 @@ LUCKY = $(HTTP
 google.com/search?btnI=I%27m+Feeling+Lucky&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=$0,$0)
 D = <span class="inlinecode">$0</span>
 BIGOH = <b><i>&Omicron;</i>(</b>$(D $0)<b><i>)</i></b>
-GLOSSARY = $(LINK2 ../glossary.html#$0, $0)
-XREF = <a href="std_$1.html#$2">$(D std.$1.$2)</a>
-CXREF = <a href="core_$1.html#$2">$(D core.$1.$2)</a>
-ECXREF = <a href="etc_c_$1.html#$2">$(D etc.c.$1.$2)</a>
-LREF = <a href="#$1">$(D $1)</a>
+
+
+__SYMBOLREF0 = <a href="$1.html#$3">$(D $2.$3)</a>
+__SYMBOLREF1 = $(__SYMBOLREF0 $1$(PACKAGESEP)$3, $2.$3, $4)
+__SYMBOLREF2 = $(__SYMBOLREF1 $1$(PACKAGESEP)$3, $2.$3, $4, $5)
+__SYMBOLREF3 = $(__SYMBOLREF2 $1$(PACKAGESEP)$3, $2.$3, $4, $5, $6, $7)
+__SYMBOLREF4 = $(__SYMBOLREF3 $1$(PACKAGESEP)$3, $2.$3, $4, $5, $6, $7, $8)
+__SYMBOLREF5 = $(__SYMBOLREF4 $1$(PACKAGESEP)$3, $2.$3, $4, $5, $6, $7, $8, $9)
+__SYMBOLREF6 = $(__SYMBOLREF5 $1$(PACKAGESEP)$3, $2.$3, $4, $5, $6, $7, $8, $9, $10)
+
+UPREF  = $(__SYMBOLREF0 $1, $1, $2)
+
+RREF   = $(__SYMBOLREF1 $1, $1, $2, $3)
+RREF2  = $(__SYMBOLREF2 $1, $1, $2, $3, $4)
+RREF3  = $(__SYMBOLREF3 $1, $1, $2, $3, $4, $5)
+RREF4  = $(__SYMBOLREF4 $1, $1, $2, $3, $4, $5, $6, $7)
+RREF5  = $(__SYMBOLREF5 $1, $1, $2, $3, $4, $5, $6, $7, $8)
+RREF6  = $(__SYMBOLREF6 $1, $1, $2, $3, $4, $5, $6, $7, $8, $9)
+
+DPREF   = $(__SYMBOLREF1 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2)
+DPREF2  = $(__SYMBOLREF2 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3)
+DPREF3  = $(__SYMBOLREF3 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3, $4)
+DPREF4  = $(__SYMBOLREF4 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3, $4, $5, $6)
+DPREF5  = $(__SYMBOLREF5 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3, $4, $5, $6, $7)
+DPREF6  = $(__SYMBOLREF6 $(DEFAULTPACKAGE), $(DEFAULTPACKAGE), $1, $2, $3, $4, $5, $6, $7, $8)
+
+PREF   = $(__SYMBOLREF1 $(THISPACKAGE), $(THISPACKAGE), $1, $2)
+PREF2  = $(__SYMBOLREF2 $(THISPACKAGE), $(THISPACKAGE), $1, $2, $3)
+PREF3  = $(__SYMBOLREF3 $(THISPACKAGE), $(THISPACKAGE), $1, $2, $3, $4)
+PREF4  = $(__SYMBOLREF4 $(THISPACKAGE), $(THISPACKAGE), $1, $2, $3, $4, $5, $6)
+PREF5  = $(__SYMBOLREF5 $(THISPACKAGE), $(THISPACKAGE), $1, $2, $3, $4, $5, $6, $7)
+PREF6  = $(__SYMBOLREF6 $(THISPACKAGE), $(THISPACKAGE), $1, $2, $3, $4, $5, $6, $7, $8)
+
+RPREF   = $(__SYMBOLREF1 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2)
+RPREF2  = $(__SYMBOLREF2 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3)
+RPREF3  = $(__SYMBOLREF3 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4)
+RPREF4  = $(__SYMBOLREF4 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6)
+RPREF5  = $(__SYMBOLREF5 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6, $7)
+RPREF6  = $(__SYMBOLREF6 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6, $7, $8)
+
+
+MREF = <a href="#$1">$(D $1)</a>
+LREF = $(MREF $0)
+
 BUGZILLA = $(LINK2 http://d.puremagic.com/issues/show_bug.cgi?id=$0, Bugzilla $0)
 PRE = <pre>$0</pre>
-PHOBOSSRC=$(LINK2 https://github.com/D-Programming-Language/phobos/blob/master/$0, $0)
-DRUNTIMESRC=$(LINK2 https://github.com/D-Programming-Language/druntime/blob/master/src/$0, $0)
-SAMPLESRC=$(LINK2 https://github.com/D-Programming-Language/dmd/blob/master/samples/$0, /dmd/samples/d/$0)
 
 BOOKTABLE = <table cellspacing=0 cellpadding=5 class="table"><caption>$1</caption>$2</table>
 LEADINGROW = <tr class=leadingrow><td colspan=2><b><em>&nbsp;&nbsp;&nbsp;&nbsp;$0</em></b></td></tr>

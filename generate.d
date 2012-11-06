@@ -3,6 +3,7 @@
 import core.sync.mutex;
 import std.algorithm;
 import std.array;
+import std.exception;
 import std.file;
 import std.getopt;
 import std.parallelism;
@@ -13,29 +14,56 @@ import std.regex;
 import std.stdio;
 import std.string;
 
-string[] parseModuleFile(string path)
+struct Module
 {
-	if(!exists(path))
+	string filePath, fileBaseName;
+
+	string rootPackage, packageName, moduleName;
+
+
+	string getFilePath(in char[] root) const
 	{
-		throw new Exception(format("Module file could not be found (%s)", path));
+		return filePath ? filePath : xformat("%s/%s", root, fileBaseName);
 	}
-	
+
+	string getGeneratedName(in char[] separator) const
+	{
+		return fileBaseName.stripExtension().replace("/", separator) ~ ".html";
+	}
+}
+
+string getPackageDDocFilePath(in char[] packageName, in char[] tempFolder)
+{
+	return buildPath(tempFolder, packageName ~ ".ddoc");
+}
+
+string getPackageDDocFileContent(in char[] packageName)
+{
+	// Don't place macro definition in the first line because it will be ignored.
+	return xformat("\nTHISPACKAGE=%s\nTHISROOTPACKAGE=%s\n",
+		packageName, packageName.findSplitBefore(".")[0]);
+}
+
+const(Module)[] parseModuleFile(in string path)
+{
+	enforce(exists(path), xformat("Module file could not be found (%s)", path));
+
 	auto modPattern = regex(`\$\(MODULE\s+([^,)]+)`);
-	
+
 	string[] modules;
 	foreach(line; File(path).byLine())
 	{
-		auto m = match(line, modPattern);
-		if(m)
+		if(auto m = match(line, modPattern))
 			modules ~= m.captures[1].idup;
 	}
-	
-	return modules.map!(modName => modName.replace(".", "/") ~ ".d")().array();
-}
 
-string generatedName(string modName, string separator)
-{
-	return modName.stripExtension().replace("/", separator) ~ ".html";
+	return modules.map!(name => name.splitter('.').array())
+		.map!(divided => Module(
+			null, divided.join("/") ~ ".d",
+			divided.length > 1 ? divided[0] : null,
+			divided.length > 1 ? divided[0 .. $-1].join(".") : null,
+			divided[$-1]
+		 ))().array();
 }
 
 auto usage = `Generate bootDoc documentation pages for a project
@@ -91,7 +119,7 @@ int main(string[] args)
 	bool parallelMode = false;
 	string[] extras;
 	string outputDir = ".";
-	
+
 	getopt(args, config.passThrough,
 		"bootdoc", &bootDoc,
 		"modules", &moduleFile,
@@ -103,34 +131,47 @@ int main(string[] args)
 		"extra", (string _, string path){ extras ~= path; },
 		"output", &outputDir
 	);
-	
+
 	if(args.length < 2)
 	{
 		writefln(usage, args[0]);
 		return 2;
 	}
-	
+
 	immutable root = args[1];
 	immutable passThrough =
 		args.length > 2 ?
-		args[2 .. $].map!(arg => format(`"%s"`, arg))().array().join(" ") :
+		args[2 .. $].map!(arg => xformat(`"%s"`, arg))().array().join(" ") :
 		null;
 
-	immutable bootDocFile = format("%s/bootdoc.ddoc", bootDoc);
+	immutable bootDocFile = xformat("%s/bootdoc.ddoc", bootDoc);
 	Mutex outputMutex = new Mutex();
-	
-	bool generate(string name, string inputPath)
+
+	immutable tempFolder = buildPath(tempDir(), "bootDoc-temp");
+	if(exists(tempFolder))
+		rmdirRecurse(tempFolder);
+	mkdir(tempFolder);
+	scope(exit) rmdirRecurse(tempFolder);
+
+	immutable byPackageDocFilePrefix = buildPath(tempFolder, "package-");
+
+	bool generate(in Module mod)
 	{
-		auto outputName = buildPath(outputDir, generatedName(name, separator));
-		
-		auto command = format(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
-			dmd, root, outputName, inputPath, settingsFile, bootDocFile, moduleFile);
-		
+		auto outputName = buildPath(outputDir, mod.getGeneratedName(separator));
+
+		auto command = xformat(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
+			dmd, root, outputName, mod.getFilePath(root), settingsFile, bootDocFile, moduleFile);
+
+		if(mod.packageName)
+		{
+			command ~= xformat(`"%s" `, mod.packageName.getPackageDDocFilePath(tempFolder));
+		}
+
 		if(passThrough !is null)
 		{
 			command ~= passThrough;
 		}
-		
+
 		if(verbose)
 		{
 			outputMutex.lock();
@@ -138,32 +179,33 @@ int main(string[] args)
 			scope (exit)
 				outputMutex.unlock();
 
-			writefln("%s => %s\n  [%s]\n", name, outputName, command);
+			writefln("%s => %s\n  [%s]\n", mod.fileBaseName, outputName, command);
 		}
-		
+
 		return system(command) == 0;
 	}
-	
-	auto modList = parseModuleFile(moduleFile);
-	
+
+	const modList = parseModuleFile(moduleFile) ~
+		extras.map!(name => Module(name, baseName(name)))().array();
+
+	foreach(mod; modList.filter!`a.packageName`())
+		std.file.write(
+			mod.packageName.getPackageDDocFilePath(tempFolder),
+			mod.packageName.getPackageDDocFileContent()
+		);
+
 	if(parallelMode)
 	{
-		immutable workUnitSize = 1;
-		
-		foreach(name; parallel(modList, workUnitSize))
-			generate(name, format("%s/%s", root, name));
-		
-		foreach(name; parallel(extras, workUnitSize))
-			generate(baseName(name), name);
+		enum workUnitSize = 1;
+
+		foreach(mod; parallel(modList, workUnitSize))
+			generate(mod);
 	}
 	else
 	{
-		foreach(name; modList)
-			generate(name, format("%s/%s", root, name));
-		
-		foreach(name; extras)
-			generate(baseName(name), name);
+		foreach(mod; modList)
+			generate(mod);
 	}
-	
+
 	return 0;
 }
