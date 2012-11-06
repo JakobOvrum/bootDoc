@@ -239,7 +239,7 @@ RPREF4  = $(__SYMBOLREF4 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4,
 RPREF5  = $(__SYMBOLREF5 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6)
 RPREF6  = $(__SYMBOLREF6 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6, $7)
 
-MREF = <a href="#$1">$(D $1)</a>
+MREF = <a class="symbol-link" href="#$1">$(D $1)</a>
 LREF = $(MREF $0)
 
 __MODULEREF0 = <a href="$1.html">$(D $2)</a>
