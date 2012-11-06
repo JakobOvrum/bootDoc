@@ -280,5 +280,5 @@ RPMODULE4  = $(__MODULEREF4 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, 
 RPMODULE5  = $(__MODULEREF5 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6)
 RPMODULE6  = $(__MODULEREF6 $(THISROOTPACKAGE), $(THISROOTPACKAGE), $1, $2, $3, $4, $5, $6, $7)
 
-STDREF = $(HTTP dlang.org/phobos/std_$1.html#$2, std.$1.$2)
-STDMODULE = $(HTTP dlang.org/phobos/std_$1.html, std.$1)
+STDREF = $(HTTP dlang.org/phobos/std_$1.html#$2, $(D std.$1.$2))
+STDMODULE = $(HTTP dlang.org/phobos/std_$1.html, $(D std.$1))
