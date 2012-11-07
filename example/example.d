@@ -22,6 +22,7 @@ void baz(int a);
 struct S
 {
 	/**
+	 * Test for $(BUGREF 4).
 	 * Params:
 	 *    a = Donec massa augue, mattis id.
 	 */

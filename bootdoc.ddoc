@@ -201,6 +201,9 @@ WEB = $(HTTP $1,$2)
 LUCKY = $(HTTP
 google.com/search?btnI=I%27m+Feeling+Lucky&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=$0,$0)
 
+BUGREF = <a href="$(ISSUETRACKER $1)">bug #$1</a>
+ISSUEREF = <a href="$(ISSUETRACKER $1)">issue #$1</a>
+
 __SYMBOLREF0 = <a href="$1.html#$3">$(D $2.$3)</a>
 __SYMBOLREF1 = $(__SYMBOLREF0 $1$(PACKAGESEP)$3, $2.$3, $4)
 __SYMBOLREF2 = $(__SYMBOLREF1 $1$(PACKAGESEP)$3, $2.$3, $4, $5)

@@ -3,6 +3,7 @@ REFERENCETOP = example.example.html
 REPOSRCTREE = http://github.com/JakobOvrum/bootDoc/tree/master
 TITLEBARTEXT = <a href="https://github.com/JakobOvrum/bootDoc">Github Page</a>
 RESOURCEROOT =
+ISSUETRACKER = https://github.com/JakobOvrum/bootDoc/issues/$1
 DEFAULTPACKAGE = example
 PACKAGESEP = .
 FAVICON = $(RESOURCEROOT)assets/ico/favicon.ico
