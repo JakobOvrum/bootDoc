@@ -155,7 +155,7 @@ int main(string[] args)
 
 	immutable byPackageDocFilePrefix = buildPath(tempFolder, "package-");
 
-	bool generate(in Module mod)
+	int generate(in Module mod)
 	{
 		auto outputName = buildPath(outputDir, mod.getGeneratedName(separator));
 
@@ -182,7 +182,7 @@ int main(string[] args)
 			writefln("%s => %s\n  [%s]\n", mod.fileBaseName, outputName, command);
 		}
 
-		return system(command) == 0;
+		return system(command);
 	}
 
 	const modList = parseModuleFile(moduleFile) ~
@@ -199,12 +199,20 @@ int main(string[] args)
 		enum workUnitSize = 1;
 
 		foreach(mod; parallel(modList, workUnitSize))
-			generate(mod);
+		{
+			auto result = generate(mod);
+			if(result != 0)
+				return result;
+		}
 	}
 	else
 	{
 		foreach(mod; modList)
-			generate(mod);
+		{
+			auto result = generate(mod);
+			if(result != 0)
+				return result;
+		}
 	}
 
 	return 0;
