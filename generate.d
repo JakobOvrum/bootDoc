@@ -57,7 +57,7 @@ const(Module)[] parseModuleFile(in string path)
 			modules ~= m.captures[1].idup;
 	}
 
-	return modules.map!(name => name.splitter('.').array())
+	return modules.map!(name => name.splitter('.').array())()
 		.map!(divided => Module(
 			null, divided.join("/") ~ ".d",
 			divided.length > 1 ? divided[0] : null,
