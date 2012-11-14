@@ -1,5 +1,6 @@
 #!/usr/bin/env rdmd
 
+import core.atomic;
 import core.sync.mutex;
 import std.algorithm;
 import std.array;
@@ -194,26 +195,23 @@ int main(string[] args)
 			mod.packageName.getPackageDDocFileContent()
 		);
 
+	shared int result;
+
 	if(parallelMode)
 	{
 		enum workUnitSize = 1;
 
 		foreach(mod; parallel(modList, workUnitSize))
-		{
-			auto result = generate(mod);
-			if(result != 0)
-				return result;
-		}
+			if (auto res = generate(mod))
+				cas(&result, 0, res); // Store the first error encountered.
 	}
 	else
 	{
 		foreach(mod; modList)
-		{
-			auto result = generate(mod);
-			if(result != 0)
-				return result;
-		}
+			if (auto res = generate(mod))
+				if (!result) // Store the first error encountered.
+					result = res;
 	}
 
-	return 0;
+	return result;
 }
