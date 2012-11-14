@@ -1,9 +1,11 @@
 #!/usr/bin/env rdmd
 
 import core.atomic;
+import core.thread;
 import core.sync.mutex;
 import std.algorithm;
 import std.array;
+import std.conv;
 import std.exception;
 import std.file;
 import std.getopt;
@@ -148,9 +150,14 @@ int main(string[] args)
 	immutable bootDocFile = xformat("%s/bootdoc.ddoc", bootDoc);
 	Mutex outputMutex = new Mutex();
 
-	immutable tempFolder = buildPath(tempDir(), "bootDoc-temp");
-	if(exists(tempFolder))
+	immutable tempFolder = buildPath(tempDir(), "bootDoc-temp" ~ to!string(getpid()));
+	try
 		rmdirRecurse(tempFolder);
+	catch (FileException)
+	{
+		// Not actually an error.
+	}
+
 	mkdir(tempFolder);
 	scope(exit) rmdirRecurse(tempFolder);
 
