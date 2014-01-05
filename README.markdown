@@ -1,6 +1,6 @@
 bootDoc
 ===================================
-[DDoc](http://dlang.org/ddoc.html) theme using [Bootstrap](http://twitter.github.com/bootstrap/) for styling.
+[DDoc](http://dlang.org/ddoc.html) theme using [Bootstrap](http://getbootstrap.com/) for styling.
 *bootDoc* uses JavaScript to extend and improve DDoc's capabilities, such as by adding a module overview tree and
 by enabling fully qualified page anchors.
 
@@ -15,17 +15,17 @@ Features
  * Sidebar with a package explorer tree and a tree of the symbols in the current module.
  * Configurable titlebar, with a go-to-symbol form.
  * Fully qualified page anchor names; individual symbols can be linked without conflicting with similarly named symbols in the same module.
- * Neat styling using [Bootstrap](http://twitter.github.com/bootstrap/).
+ * Neat styling using [Bootstrap](http://getbootstrap.com/).
 
 Demonstration
 -----------------------------------
-Phobos documentation using *bootDoc* can be found [here](http://jakobovrum.github.com/bootdoc-phobos/).
-Additionally, the [LuaD documentation](http://jakobovrum.github.com/LuaD/) uses *bootDoc*.
+Phobos documentation using *bootDoc* can be found [here](http://jakobovrum.github.io/bootdoc-phobos/).
+Additionally, the [LuaD documentation](https://jakobovrum.github.io/LuaD/) uses *bootDoc*.
 
 Usage with Github Pages
 -----------------------------------
 
- * Create a gh-pages branch to host the generated documentation ([instructions here](http://help.github.com/pages/#project_pages_manually)).
+ * Create a gh-pages branch to host the generated documentation ([instructions here](https://help.github.com/articles/creating-project-pages-manually)).
   - For the purposes of this guide, we will assume this is an empty branch in its own repository in a subdirectory of the repository containing the source files. Since we're using a clean slate branch which still depends on the contents of the master branch (or whatever branch you want to
   generate documentation for), two separate repositories are required.
   - For example, if your project repository is in a directory `myproj`, we will assume your gh-pages repository is in `myproj/gh-pages`.
@@ -60,8 +60,8 @@ see an overview of how to use it.
 
 License
 -----------------------------------
-bootDoc is licensed under the terms of the MIT license (see the [LICENSE file](http://github.com/JakobOvrum/bootDoc/blob/master/LICENSE.txt) for details).
+bootDoc is licensed under the terms of the MIT license (see the [LICENSE file](https://github.com/JakobOvrum/bootDoc/blob/master/LICENSE.txt) for details).
 
 Acknowledgements
 -----------------------------------
-Thanks to [Robik](https://github.com/robik) for his work on [cuteDoc](https://github.com/robik/cuteDoc), which inspired this project.
+Thanks to [Robik](https://github.com/robik) for his work on *cuteDoc*, which inspired this project.
