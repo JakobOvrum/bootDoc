@@ -26,7 +26,7 @@ struct Module
 
 	string getFilePath(in char[] root) const
 	{
-		return filePath ? filePath : xformat("%s/%s", root, fileBaseName);
+		return filePath ? filePath : format("%s/%s", root, fileBaseName);
 	}
 
 	string getGeneratedName(in char[] separator) const
@@ -43,13 +43,13 @@ string getPackageDDocFilePath(in char[] packageName, in char[] tempFolder)
 string getPackageDDocFileContent(in char[] packageName)
 {
 	// Don't place macro definition in the first line because it will be ignored.
-	return xformat("\nTHISPACKAGE=%s\nTHISROOTPACKAGE=%s\n",
+	return format("\nTHISPACKAGE=%s\nTHISROOTPACKAGE=%s\n",
 		packageName, packageName.findSplitBefore(".")[0]);
 }
 
 const(Module)[] parseModuleFile(in string path)
 {
-	enforce(exists(path), xformat("Module file could not be found (%s)", path));
+	enforce(exists(path), format("Module file could not be found (%s)", path));
 
 	auto modPattern = regex(`\$\(MODULE\s+([^,)]+)`);
 
@@ -144,10 +144,10 @@ int main(string[] args)
 	immutable root = args[1];
 	immutable passThrough =
 		args.length > 2 ?
-		args[2 .. $].map!(arg => xformat(`"%s"`, arg))().array().join(" ") :
+		args[2 .. $].map!(arg => format(`"%s"`, arg))().array().join(" ") :
 		null;
 
-	immutable bootDocFile = xformat("%s/bootdoc.ddoc", bootDoc);
+	immutable bootDocFile = format("%s/bootdoc.ddoc", bootDoc);
 	Mutex outputMutex = new Mutex();
 
 	immutable tempFolder = buildPath(tempDir(), "bootDoc-temp" ~ to!string(getpid()));
@@ -167,12 +167,12 @@ int main(string[] args)
 	{
 		auto outputName = buildPath(outputDir, mod.getGeneratedName(separator));
 
-		auto command = xformat(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
+		auto command = format(`%s -c -o- -I"%s" -Df"%s" "%s" "%s" "%s" "%s" `,
 			dmd, root, outputName, mod.getFilePath(root), settingsFile, bootDocFile, moduleFile);
 
 		if(mod.packageName)
 		{
-			command ~= xformat(`"%s" `, mod.packageName.getPackageDDocFilePath(tempFolder));
+			command ~= format(`"%s" `, mod.packageName.getPackageDDocFilePath(tempFolder));
 		}
 
 		if(passThrough !is null)
